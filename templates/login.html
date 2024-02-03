@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>登录页</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+</head>
+<style>
+    .login-block {
+        position: absolute;
+        top: 50%;
+        transform:  translateY(-50%);
+    }
+</style>
+<body background="../static/img/1.jpeg" style="background-position: center 0; background-size: cover; margin: 0px;">
+<div>
+
+<!-- action="api/v1.0/userlogin" enctype="application/json" method="post"   -->
+    <form action="/api/v1.0/userlogin" method="post" id="myform">
+        <div class="col-md-4 col-lg-4 col-lg-offset-4 col-md-offset-4 login-block" style="background-color: white; opacity: 0.8; padding: 50px; border-radius: 15px">
+            <h3 style="text-align: center;padding-bottom:20px;font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 40px">用户登录</h3>
+            <div class="form-group input-group input-group-lg" >
+                <span class="input-group-addon"  >手机号码</span>
+                <input type="text" name="Mobile" id="mobile" class="form-control" placeholder="手机号码">
+            </div>
+
+            <div class="form-group input-group input-group-lg">
+                <span class="input-group-addon"  >密码&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <input type="password" name="Password" id="password" class="form-control" placeholder="密码">
+
+            </div>
+            <div class="form-group center-block">
+                <button type="submit" id="submitBtn" class="btn btn-success center-block" style="width: 80px;height: 40px;font-size: 20px">登 录</button>
+                <a href="/user/register">没有账户？点击注册</a>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script>
+    document.getElementById("myform").addEventListener("submit",function (event){
+        //组织默认提交事件的发生
+        event.preventDefault();
+        //获取表单中所有元素
+        let elements = this.elements;
+        // //遍历元素的值加入对象结构
+        // let objectUtil = {};
+        // for(let i =0; i < elements.length;i++){
+        //     objectUtil[elements[i].name] = elements[i].value;
+        // }
+        /*构造JS对象*/
+        let body = {
+            "mobile": document.getElementById("mobile").value,
+            "password": document.getElementById("password").value
+        };
+        //至此表单中所有数据都被装入js对象，我们将对象转为json对象，备传。
+        let jsonRel=JSON.stringify(body);
+        //创建XmlHttpRequest对象
+        var toFile = new XMLHttpRequest();
+        //指定请求类型，路径及是否异步
+        toFile.open("post","http://localhost:8066/api/v1.0/userlogin",true);
+        //设置请求头，变为application/json类型
+        toFile.setRequestHeader("Content-Type","application/json");
+        //发送数据
+        toFile.send(jsonRel);
+        //最后监听返回状态，一旦发生改变，就跳转页面
+        toFile.onreadystatechange = function (){
+            if(toFile.readyState == 4 && toFile.status == 200){
+                alert("登录成功！");
+                //接收返回页面，并打开新窗口显示
+                let responesRel=toFile.responseText;
+                document.write(responesRel);
+
+            }
+        }
+    })
+    // const form = document.getElementById('myForm');
+    // const submitBtn = document.getElementById('submitBtn');
+    //
+    // submitBtn.addEventListener('click', e => {
+    //     e.preventDefault();
+    //
+    //     // 获取表单数据并提交
+    //     const data = {
+    //         mobile: form.mobile.value,
+    //         password: form.password.value
+    //     };
+    //
+    //     fetch(form.action, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(data)
+    //     });
+    //
+    // });
+    // /*获取数据*/
+    // let inputs = document.querySelectorAll('input');
+    // alert(inputs)
+    // // console.log(inputs)
+    // /*获取按钮元素*/
+    // let button = document.querySelectorAll('button');
+    // button.onclick = function () {
+    //     /*判断数据*/
+    //     alert("123")
+    //     let mobile = inputs[0].value;
+    //     let password = inputs[1].value;
+    //     if(mobile=="" || password=="") {
+    //         alert("内容不能为空!");
+    //         return;
+    //     }
+    //     /*构造JS对象*/
+    //     let body = {
+    //         "mobile": mobile,
+    //         "password": password
+    //     };
+    //     //通过stringify方法将JS对象转成json字符串
+    //     let jsonStr = JSON.stringify(body);
+    //     $.ajax({
+    //         type: 'post',
+    //         url: '/api/v1.0/userlogin',
+    //         contentType: 'application/json;charset=utf8',
+    //         data:jsonStr,
+    //         success: function (body) {
+    //             alert("发送成功!");
+    //         }
+    //     });
+    //     /*发送成功后输入框清空*/
+    //     for (let input of inputs) {
+    //         input.value = "";
+    //     }
+    // }
+
+</script>
+</html>
+
